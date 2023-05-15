@@ -104,31 +104,17 @@ window.onload = () => {
 };
 
 const generateAndDisplayNumbers = () => {
-    let numbers;
-    const search = window.location.search; // Get part of URL after question mark
-    if (search && search.match(/^\?[0-9]-[0-9]-[0-9]-[0-9]$/)) { // Check if URL format is correct
-        numbers = search.slice(1).split('-').map(Number); // Get numbers from URL
-        displayNumbers(numbers);
-        result.textContent = '';
-    } else {
-        numbers = generateNumbers(); // Generate random numbers
-        window.location.href = `https://make10.onrender.com/?${numbers.join('-')}`;
-    }
+  let numbers;
+  const search = window.location.search; // Get part of URL after question mark
+  if (search && search.match(/^\?[0-9]-[0-9]-[0-9]-[0-9]$/)) { // Check if URL format is correct
+      numbers = search.slice(1).split('-').map(Number); // Get numbers from URL
+      displayNumbers(numbers);
+      result.textContent = '';
+  } else {
+      numbers = generateNumbers(); // Generate random numbers
+      window.location.href = `${window.location.origin}/?${numbers.join('-')}`;
+  }
 };
-
-//LOCAL VERSION
-//const generateAndDisplayNumbers = () => {
-//  let numbers;
-//  const search = window.location.search; // Get part of URL after question mark
-//  if (search && search.match(/^\?[0-9]-[0-9]-[0-9]-[0-9]$/)) { // Check if URL format is correct
-//      numbers = search.slice(1).split('-').map(Number); // Get numbers from URL
-//      displayNumbers(numbers);
-//      result.textContent = '';
-//  } else {
-//      numbers = generateNumbers(); // Generate random numbers
-//      window.location.href = `${window.location.origin}/?${numbers.join('-')}`;
-//  }
-//};
 
   operatorContainer.addEventListener('click', event => {
       if (event.target.className === 'operator') {
