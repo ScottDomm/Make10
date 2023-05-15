@@ -1,0 +1,9 @@
+staticSites:
+  - name: make10
+    buildCommand: echo 'no build step'
+    publishDir: .
+    headers:
+      - path: "*.js"
+        headers:
+          - name: "Content-Type"
+            value: "application/javascript"
