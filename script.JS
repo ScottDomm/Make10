@@ -2,8 +2,11 @@ window.onload = () => {
   const numberContainer = document.getElementById('number-container');
   const operatorContainer = document.getElementById('operator-container');
   const userInput = document.getElementById('user-input');
+  let userInputCalc = "";
   const submitBtn = document.getElementById('submit-btn');
+  const tryBtn = document.getElementById('try-btn');
   const result = document.getElementById('result');
+  const buttonsClicked = [];
 
   const generateNumbers = () => {
       return Array.from({length: 4}, () => Math.floor(Math.random() * 10));
@@ -16,6 +19,8 @@ window.onload = () => {
           btn.textContent = number;
           btn.addEventListener('click', () => {
               userInput.value += number;
+              userInputCalc += number;
+              buttonsClicked.push(number)
               btn.disabled = true;
           });
           numberContainer.appendChild(btn);
@@ -48,20 +53,21 @@ window.onload = () => {
 
   function resetIncorrectBoard() {
     userInput.value = '';
+    userInputCalc = "";
     Array.from(numberContainer.children).forEach(btn => btn.disabled = false);
+    buttonsClicked.length = 0
   }
 
   const checkResult = () => {
-    let equation = userInput.value.trim().split(' ');
-    let numbersUsed = getNumbers(userInput.value.trim()).map(Number);
+    let equation = userInputCalc.trim().split(' ');
+    let numbersUsed = getNumbers(userInputCalc.trim()).map(Number);
     let zeroCheckNumbers = equation.filter(item => !isNaN(item)); 
     let originalNumbers = Array.from(numberContainer.children).map(btn => Number(btn.textContent));
 
-    console.log(zeroCheckNumbers)
-
+       
     // Check if all numbers are used
     if (!areArraysEqual(numbersUsed, originalNumbers)) {
-        result.textContent = 'Invalid equation. You must use all the generated numbers.';
+        result.textContent = 'Nice Try! You must use all the generated numbers.';
         result.style.color = 'red';
         resetIncorrectBoard()
         return;
@@ -69,18 +75,38 @@ window.onload = () => {
 
     // Check if zero is not at the front of a number, or if it is, that it is by itself
     if (zeroCheckNumbers.some(num => num.toString().startsWith('0') && num != "0")) {
-        result.textContent = 'Invalid equation. Zero cannot be at the front of a number unless it is by itself.';
+        result.textContent = 'Nice Try! Zero cannot be at the front of a number.';
         result.style.color = 'red';
         resetIncorrectBoard()
         return;
     }
 
+    
+
     // Check if there aren't two operators in a row
+    for (let i = 0; i < buttonsClicked.length - 1; i++) {
+      // Ignore brackets
+      if (buttonsClicked[i] === '(' || buttonsClicked[i] === ')' || buttonsClicked[i + 1] === '(' || buttonsClicked[i + 1] === ')') {
+          continue;
+      }
+  
+      if (typeof buttonsClicked[i] === 'string' && typeof buttonsClicked[i + 1] === 'string') {
+        result.textContent = 'Invalid equation. You cannot use two operators in a row.';
+        result.style.color = 'red';
+        resetIncorrectBoard()
+        return;
+      }
+  }
+  
+    
+    for (let i = 0; i < buttonsClicked.length - 1; i++) {
+      if (typeof buttonsClicked[i] === 'string' && typeof buttonsClicked[i + 1] === 'string') {
+
+      }
+    }
+    
     if (zeroCheckNumbers.some(num => num == "")) {
-      result.textContent = 'Invalid equation. You cannot use two operators in a row.';
-      result.style.color = 'red';
-      resetIncorrectBoard()
-      return;
+      
   }
 
 
@@ -91,7 +117,7 @@ window.onload = () => {
             result.style.color = 'green';
             setTimeout(generateAndDisplayNumbers, 2000);
         } else {
-            result.textContent = 'That\'s not correct. Try again!';
+            result.textContent = 'That\'s not 10! That was ' + eval(equation.join(' '));
             result.style.color = 'red';
         }
     } catch (e) {
@@ -100,6 +126,7 @@ window.onload = () => {
     }
 
     userInput.value = '';
+    userInputCalc = "";
     Array.from(numberContainer.children).forEach(btn => btn.disabled = false);
 };
 
@@ -116,12 +143,22 @@ const generateAndDisplayNumbers = () => {
   }
 };
 
-  operatorContainer.addEventListener('click', event => {
-      if (event.target.className === 'operator') {
-          userInput.value += ` ${event.target.value} `;
-      }
-  });
+const regenerateAndDisplayNumbers = () => {
+  let numbers;
+  numbers = generateNumbers(); // Generate random numbers
+  console.log(numbers)
+  window.location.href = `${window.location.origin}/?${numbers.join('-')}`;
+};
+
+operatorContainer.addEventListener('click', event => {
+    if (event.target.className === 'operator') {
+        userInputCalc += ` ${event.target.value} `;
+        userInput.value += ` ${event.target.textContent} `;
+        buttonsClicked.push(`${event.target.value}`)
+    }
+});
 
   submitBtn.addEventListener('click', checkResult);
+  tryBtn.addEventListener('click', regenerateAndDisplayNumbers);
   generateAndDisplayNumbers();
 };
