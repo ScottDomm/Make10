@@ -40,6 +40,16 @@ button:hover:not(:disabled) {
   background-color: #0056b3;
 }
 
+#try-btn {
+  background-color: white;
+  color: purple;
+}
+
+#try-btn:hover:not(:disabled) {
+  background-color: purple;
+  color: white;
+}
+
 #submit-btn {
   background-color: #28a745;
 }
