@@ -5,6 +5,7 @@ window.onload = () => {
   let userInputCalc = "";
   const submitBtn = document.getElementById('submit-btn');
   const tryBtn = document.getElementById('try-btn');
+  const resetBtn = document.getElementById('reset-btn');
   const result = document.getElementById('result');
   const buttonsClicked = [];
 
@@ -80,9 +81,7 @@ window.onload = () => {
         resetIncorrectBoard()
         return;
     }
-
-    
-
+  
     // Check if there aren't two operators in a row
     for (let i = 0; i < buttonsClicked.length - 1; i++) {
       // Ignore brackets
@@ -160,5 +159,6 @@ operatorContainer.addEventListener('click', event => {
 
   submitBtn.addEventListener('click', checkResult);
   tryBtn.addEventListener('click', regenerateAndDisplayNumbers);
+  resetBtn.addEventListener('click', resetIncorrectBoard);
   generateAndDisplayNumbers();
 };

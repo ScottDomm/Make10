@@ -58,6 +58,14 @@ button:hover:not(:disabled) {
   background-color: #1e7e34;
 }
 
+#reset-btn {
+  background-color: red;
+}
+
+#reset-btn:hover:not(:disabled) {
+  background-color: rgb(179, 0, 0);
+}
+
 input {
   text-align: center;
   padding: 10px 20px;
