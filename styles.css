@@ -1,79 +1,133 @@
 body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
-  margin: 0;
-  background-color: #f4f4f4;
-  font-family: Arial, sans-serif;
 }
 
-#header-block {
+.header-block {
+  width: 100%;
   text-align: center;
-  margin-bottom: 20px;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #3F4636;
+  color: white;
 }
 
-#number-container, #operator-container {
+#header-image {
+  max-width: 100%;
+  height: 150px;
+}
+
+h1 {
+  color: #A97440;
+  font-size: 2.5em;
+}
+
+p {
+  color: #A97440;
+  font-size: 1.2em;
+}
+
+#number-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  flex-wrap: wrap;
+  margin: 20px 0;
 }
 
-button {
-  padding: 10px 20px;
-  margin: 0 10px;
-  border: none;
-  border-radius: 5px;
+.number {
+  background-color: #28a745;
   color: white;
-  background-color: #007BFF;
-  font-size: 18px;
-  cursor: pointer;
+  border: none;
+  border-radius: 50%;
+  padding: 20px;
+  margin: 5px;
+  font-size: 1.5em;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   transition: background-color 0.3s ease;
 }
 
-button:disabled {
-  background-color: #ccc;
+.number:hover {
+  background-color: #218838;
+  cursor: pointer;
 }
 
-button:hover:not(:disabled) {
-  background-color: #0056b3;
+.number:disabled {
+  cursor: not-allowed;
+  background-color: grey;
 }
 
-#try-btn {
-  background-color: white;
-  color: purple;
-}
-
-#try-btn:hover:not(:disabled) {
-  background-color: purple;
+.operator {
+  background-color: #007BFF;
   color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 1.2em;
+  transition: background-color 0.3s ease;
 }
 
-#submit-btn {
-  background-color: #28a745;
+.operator:hover {
+  background-color: #0056b3;
+  cursor: pointer;
 }
 
-#submit-btn:hover:not(:disabled) {
-  background-color: #1e7e34;
+.operator:disabled {
+  cursor: not-allowed;
+  background-color: grey;
+}
+
+#user-input {
+  width: 80%;
+  padding: 10px;
+  font-size: 1.2em;
+  margin: 20px 0;
+  text-align: center;
 }
 
 #reset-btn {
-  background-color: red;
-}
-
-#reset-btn:hover:not(:disabled) {
-  background-color: rgb(179, 0, 0);
-}
-
-input {
-  text-align: center;
-  padding: 10px 20px;
-  font-size: 18px;
-  border: 2px solid #007BFF;
+  background-color: #ffc107;
+  color: white;
+  border: none;
   border-radius: 5px;
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 1.2em;
+  transition: background-color 0.3s ease;
+}
+
+#reset-btn:hover {
+  background-color: #e0a800;
+  cursor: pointer;
+}
+
+#try-btn {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #6c757d;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 1.2em;
+  transition: background-color 0.3s ease;
+}
+
+#try-btn:hover {
+  background-color: #e2e6ea;
+  cursor: pointer;
 }
 
 #result {
-  font-size: 20px;
+  color: #dc3545;
+  font-size: 1.5em;
+  margin: 20px 0;
 }

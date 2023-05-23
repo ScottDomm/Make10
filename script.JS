@@ -1,140 +1,183 @@
 window.onload = () => {
-  const numberContainer = document.getElementById('number-container');
-  const operatorContainer = document.getElementById('operator-container');
-  const userInput = document.getElementById('user-input');
-  let userInputCalc = "";
-  const submitBtn = document.getElementById('submit-btn');
-  const tryBtn = document.getElementById('try-btn');
-  const resetBtn = document.getElementById('reset-btn');
-  const result = document.getElementById('result');
-  const buttonsClicked = [];
 
-  const generateNumbers = () => {
-      return Array.from({length: 4}, () => Math.floor(Math.random() * 10));
-  };
+//Variables just needed for initiation:
+const numberContainer = document.getElementById('number-container');
+const operatorContainer = document.getElementById('operator-container');
+const tryAgainBtn = document.getElementById('try-btn');
+const resetBtn = document.getElementById('reset-btn');  
+const result = document.getElementById('result');
 
-  const displayNumbers = numbers => {
-      numberContainer.innerHTML = '';
-      for (let number of numbers) {
-          let btn = document.createElement('button');
-          btn.textContent = number;
-          btn.addEventListener('click', () => {
-              userInput.value += number;
-              userInputCalc += number;
-              buttonsClicked.push(number)
-              btn.disabled = true;
-          });
-          numberContainer.appendChild(btn);
-      }
-  };
+//Global Variables we will use:
+const userInput = document.getElementById('user-input'); //This is what is being displayed (i.e. has x and ^ in it)
+let userInputCalc = ""; // This is the actual formula to evaluate.
+const buttonsClicked = []; // This is an array of all the buttons that have been clicked.
+const numbersClicked = []; // This is an array of all the buttons that have been clicked.
 
-  function getNumbers(string) {
-    const characters = string.split('');
-    const numbers = [];
-  
-    for (const character of characters) {
-      if (character >= '0' && character <= '9') {
-        numbers.push(character);
-      }
-    }
-  
-    return numbers;
-  }
-
-  function areArraysEqual(array1, array2) {
-    if (array1.length !== array2.length) {
-      return false;
-    }
-  
-    array1.sort();
-    array2.sort();
-  
-    return array1.every((element, index) => element === array2[index]);
-  }
-
-  function resetIncorrectBoard() {
-    userInput.value = '';
-    userInputCalc = "";
-    Array.from(numberContainer.children).forEach(btn => btn.disabled = false);
-    buttonsClicked.length = 0
-  }
-
-  const checkResult = () => {
-    let equation = userInputCalc.trim().split(' ');
-    let numbersUsed = getNumbers(userInputCalc.trim()).map(Number);
-    let zeroCheckNumbers = equation.filter(item => !isNaN(item)); 
-    let originalNumbers = Array.from(numberContainer.children).map(btn => Number(btn.textContent));
-
-       
-    // Check if all numbers are used
-    if (!areArraysEqual(numbersUsed, originalNumbers)) {
-        result.textContent = 'Nice Try! You must use all the generated numbers.';
-        result.style.color = 'red';
-        resetIncorrectBoard()
-        return;
-    }
-
-    // Check if zero is not at the front of a number, or if it is, that it is by itself
-    if (zeroCheckNumbers.some(num => num.toString().startsWith('0') && num != "0")) {
-        result.textContent = 'Nice Try! Zero cannot be at the front of a number.';
-        result.style.color = 'red';
-        resetIncorrectBoard()
-        return;
-    }
-  
-    // Check if there aren't two operators in a row
-    for (let i = 0; i < buttonsClicked.length - 1; i++) {
-      // Ignore brackets
-      if (buttonsClicked[i] === '(' || buttonsClicked[i] === ')' || buttonsClicked[i + 1] === '(' || buttonsClicked[i + 1] === ')') {
-          continue;
-      }
-  
-      if (typeof buttonsClicked[i] === 'string' && typeof buttonsClicked[i + 1] === 'string') {
-        result.textContent = 'Invalid equation. You cannot use two operators in a row.';
-        result.style.color = 'red';
-        resetIncorrectBoard()
-        return;
-      }
-  }
-  
-    
-    for (let i = 0; i < buttonsClicked.length - 1; i++) {
-      if (typeof buttonsClicked[i] === 'string' && typeof buttonsClicked[i + 1] === 'string') {
-
-      }
-    }
-    
-    if (zeroCheckNumbers.some(num => num == "")) {
-      
-  }
-
-
-    // Check if equation equals 10
-    try {
-        if (eval(equation.join(' ')) === 10) {
-            result.textContent = 'Correct! Good job!';
-            result.style.color = 'green';
-            setTimeout(generateAndDisplayNumbers, 2000);
-        } else {
-            result.textContent = 'That\'s not 10! That was ' + eval(equation.join(' '));
-            result.style.color = 'red';
-        }
-    } catch (e) {
-        result.textContent = 'Invalid equation. Try again!';
-        result.style.color = 'red';
-    }
-
-    userInput.value = '';
-    userInputCalc = "";
-    Array.from(numberContainer.children).forEach(btn => btn.disabled = false);
+//This generates an array of 4 numbers.
+const generateNumbers = () => {
+    return Array.from({length: 4}, () => Math.floor(Math.random() * 10));
 };
 
+//This defines what happens when you click a number button.
+const numberClick = (number, btn) => {
+  return () => {
+      userInput.value += number;
+      userInputCalc += number;
+      buttonsClicked.push(number)
+      numbersClicked.push(number)
+      btn.style.display = "none";
+      buttonSwitch("number")
+      btn.disabled = true;
+      if (numbersClicked.length > 1 && numbersClicked.length < 4) {
+        evaluteEquation()
+      } else if (numbersClicked.length === 4) {
+        checkResult()
+      }
+
+  }
+}
+
+function buttonSwitch (switchString) {
+  if (switchString === "number") {
+    Array.from(numberContainer.children).forEach(btn => btn.disabled = true);
+    Array.from(operatorContainer.children).forEach(btn => btn.disabled = false);
+  } else {
+    Array.from(numberContainer.children).forEach(btn => btn.disabled = false);
+    Array.from(operatorContainer.children).forEach(btn => btn.disabled = true);
+  }
+}
+
+//This set's up the 4 number buttons and gives them thet number click event listener.
+const initiateNumbers = numbers => {
+    numberContainer.innerHTML = '';
+    for (let number of numbers) {
+        let btn = document.createElement('button');
+        btn.className = 'number';
+        btn.textContent = number;
+        btn.addEventListener('click', numberClick(number, btn));
+        numberContainer.appendChild(btn);
+    }
+};
+
+//This extracts the numbers from a string.
+function getNumbers(string) {
+  const characters = string.split('');
+  const numbers = [];
+
+  for (const character of characters) {
+    if (character >= '0' && character <= '9') {
+      numbers.push(character);
+    }
+  }
+
+  return numbers;
+}
+
+//This checks if two arrays contain the same elements. Must be sortable.
+function areArraysEqual(array1, array2) {
+  if (array1.length !== array2.length) {
+    return false;
+  }
+
+  array1.sort();
+  array2.sort();
+
+  return array1.every((element, index) => element === array2[index]);
+}
+
+//These are the checks to be run before evaluating.
+const interimChecks = () => {
+  let equation = userInputCalc.trim().split(' ');
+  let zeroCheckNumbers = equation.filter(item => !isNaN(item)); 
+
+  // REDUNDANT CHECK - Check if zero is not at the front of a number, or if it is, that it is by itself
+  if (zeroCheckNumbers.some(num => num.toString().startsWith('0') && num != "0")) {
+    result.textContent = 'Nice Try! Zero cannot be at the front of a number.';
+    result.style.color = 'red';
+    resetIncorrectBoard()
+    return;
+  }
+
+  // Check if there aren't two operators in a row
+  for (let i = 0; i < buttonsClicked.length - 1; i++) {
+    // Ignore brackets
+    if (buttonsClicked[i] === '(' || buttonsClicked[i] === ')' || buttonsClicked[i + 1] === '(' || buttonsClicked[i + 1] === ')') {
+        continue;
+    }
+
+    if (typeof buttonsClicked[i] === 'string' && typeof buttonsClicked[i + 1] === 'string') {
+      result.textContent = 'Invalid equation. You cannot use two operators in a row.';
+      result.style.color = 'red';
+      resetIncorrectBoard()
+      return;
+    }
+  }
+}
+
+//This is the final check that the equiation equals 10
+const checkResult = () => {
+  interimChecks();
+      
+  let finalNumber = evaluteEquation()
+
+  // Check if equation equals 10
+  try {
+      if (finalNumber === 10) {
+        winScreen()
+      } else {
+          failScreen('That\'s not 10! That was ' + eval(finalNumber));
+          result.style.color = 'red';
+      }
+  } catch (e) {
+      failScreen(result.textContent = 'Invalid equation. Try again!');
+  }
+};
+
+function winScreen() {
+  numberContainer.style.display = "None";
+  operatorContainer.style.display = "None";
+  result.textContent = 'Correct! Good job!';
+  result.style.color = 'green';
+  resetBtn.textContent ="These Numbers Again"
+  resetBtn.style.backgroundColor = "#ff0000"
+  tryAgainBtn.textContent ="New Numbers"
+  tryAgainBtn.style.backgroundColor = "#00ff00"
+}
+
+function failScreen(failString) {
+  result.textContent = failString;
+  result.style.color = 'red';
+  
+}
+
+
+
+// This evalutes the current formula in the user input.
+function evaluteEquation() {
+  let equation = userInputCalc.trim().split(' ');
+  let currentValue = eval(equation.join(' '))
+  userInput.value = currentValue;
+  userInputCalc = currentValue;
+  return currentValue;
+}
+
+// This lets the code know what to do when an operator is clicked.
+operatorContainer.addEventListener('click', event => {
+    if (event.target.className === 'operator') {
+        userInputCalc += ` ${event.target.value} `;
+        userInput.value += ` ${event.target.textContent} `;
+        buttonsClicked.push(`${event.target.value}`)
+        buttonSwitch("operator")
+    }
+});
+
+// This is the OG formula that checks if there are 4 numbers after the URL, if not it generates them and sents us there.
 const generateAndDisplayNumbers = () => {
   let numbers;
   const search = window.location.search; // Get part of URL after question mark
   if (search && search.match(/^\?[0-9]-[0-9]-[0-9]-[0-9]$/)) { // Check if URL format is correct
       numbers = search.slice(1).split('-').map(Number); // Get numbers from URL
-      displayNumbers(numbers);
+      initiateNumbers(numbers);
       result.textContent = '';
   } else {
       numbers = generateNumbers(); // Generate random numbers
@@ -142,23 +185,18 @@ const generateAndDisplayNumbers = () => {
   }
 };
 
-const regenerateAndDisplayNumbers = () => {
-  let numbers;
-  numbers = generateNumbers(); // Generate random numbers
-  console.log(numbers)
-  window.location.href = `${window.location.origin}/?${numbers.join('-')}`;
+//This resets the page by refreshing it and sending us to a new one.
+const newNumberGame = () => {
+  window.location.href = `${window.location.origin}`;
 };
 
-operatorContainer.addEventListener('click', event => {
-    if (event.target.className === 'operator') {
-        userInputCalc += ` ${event.target.value} `;
-        userInput.value += ` ${event.target.textContent} `;
-        buttonsClicked.push(`${event.target.value}`)
-    }
-});
+//This resets the board to have no user input by refreshing the page.
+function resetIncorrectBoard() {
+  location.reload()
+}
 
-  submitBtn.addEventListener('click', checkResult);
-  tryBtn.addEventListener('click', regenerateAndDisplayNumbers);
-  resetBtn.addEventListener('click', resetIncorrectBoard);
-  generateAndDisplayNumbers();
+tryAgainBtn.addEventListener('click', newNumberGame);
+resetBtn.addEventListener('click', resetIncorrectBoard);
+generateAndDisplayNumbers();
+buttonSwitch("operator")
 };
