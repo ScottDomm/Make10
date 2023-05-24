@@ -10,8 +10,11 @@ const result = document.getElementById('result');
 //Global Variables we will use:
 const userInput = document.getElementById('user-input'); //This is what is being displayed (i.e. has x and ^ in it)
 let userInputCalc = ""; // This is the actual formula to evaluate.
+let tableData = null; //This is the list of arrays and ease
+let lookupTable = {};
 const buttonsClicked = []; // This is an array of all the buttons that have been clicked.
 const numbersClicked = []; // This is an array of all the buttons that have been clicked.
+let difficulty = "";
 
 //This generates an array of 4 numbers.
 const generateNumbers = () => {
@@ -58,32 +61,6 @@ const initiateNumbers = numbers => {
         numberContainer.appendChild(btn);
     }
 };
-
-//This extracts the numbers from a string.
-function getNumbers(string) {
-  const characters = string.split('');
-  const numbers = [];
-
-  for (const character of characters) {
-    if (character >= '0' && character <= '9') {
-      numbers.push(character);
-    }
-  }
-
-  return numbers;
-}
-
-//This checks if two arrays contain the same elements. Must be sortable.
-function areArraysEqual(array1, array2) {
-  if (array1.length !== array2.length) {
-    return false;
-  }
-
-  array1.sort();
-  array2.sort();
-
-  return array1.every((element, index) => element === array2[index]);
-}
 
 //These are the checks to be run before evaluating.
 const interimChecks = () => {
@@ -183,6 +160,15 @@ const generateAndDisplayNumbers = () => {
       numbers = generateNumbers(); // Generate random numbers
       window.location.href = `${window.location.origin}/?${numbers.join('-')}`;
   }
+
+  
+  let key = JSON.stringify(numbers.sort((a, b) => a - b));
+  // Look up the difficulty.
+  difficulty = lookupTable[key];
+  console.log(difficulty)
+  if (difficulty === "Impossible") {
+    generateAndDisplayNumbers();
+  } 
 };
 
 //This resets the page by refreshing it and sending us to a new one.
@@ -195,8 +181,26 @@ function resetIncorrectBoard() {
   location.reload()
 }
 
-tryAgainBtn.addEventListener('click', newNumberGame);
-resetBtn.addEventListener('click', resetIncorrectBoard);
-generateAndDisplayNumbers();
-buttonSwitch("operator")
+fetch('valid_expressions.json')
+  .then(response => response.json())
+  .then(data => {
+    tableData = data;
+    
+    for (let row of tableData) {
+      // Parse the string into an array and sort it.
+      let numbersArray = JSON.parse(row['Numbers']).sort((a, b) => a - b);
+      // Convert the sorted array back into a string.
+      let sortedNumbersString = JSON.stringify(numbersArray);
+
+      // Store the difficulty in the lookup table, using the sorted string as the key.
+      lookupTable[sortedNumbersString] = row['Difficulty'];
+    }
+
+    tryAgainBtn.addEventListener('click', newNumberGame);
+    resetBtn.addEventListener('click', resetIncorrectBoard);
+    generateAndDisplayNumbers();
+    buttonSwitch("operator")
+  })
+  .catch(error => console.error('Error:', error));
+
 };

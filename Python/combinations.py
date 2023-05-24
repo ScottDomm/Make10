@@ -1,39 +1,7 @@
 from itertools import combinations_with_replacement
 import itertools
 import csv  # Import Python's CSV library
-import gc  # Import Python's garbage collector
-import sys
-
-# define the 5 operations
-ops = ['+', '-', '/', '*', '**']
-
-
-def generate_equations(nums):
-    for num_permutation in itertools.permutations(nums):
-        for ops_combination in itertools.product(ops, repeat=3):
-            equation = [str(num_permutation[0])]
-            for i, op in enumerate(ops_combination):
-                equation.append(' ' + op + ' ')
-                equation.append(str(num_permutation[i+1]))
-            yield ''.join(equation)
-
-
-def add_parentheses(equation):
-    equation_with_parentheses = []
-    groups = equation.split(" ")
-    for i in range(4):
-        if i == 0:
-            equation_with_parentheses.append(''.join(groups))  # no parentheses
-        elif i == 1:
-            equation_with_parentheses.append('(({} {} {}) {} {} {} {})'.format(
-                groups[0], groups[1], groups[2], groups[3], groups[4], groups[5], groups[6]))  # parentheses around the first operation
-        elif i == 2:
-            equation_with_parentheses.append('({} {} ({} {} {}) {} {})'.format(
-                groups[0], groups[1], groups[2], groups[3], groups[4], groups[5], groups[6]))  # parentheses around the second operation
-        elif i == 3:
-            equation_with_parentheses.append('({} {} {} {} ({} {} {}))'.format(
-                groups[0], groups[1], groups[2], groups[3], groups[4], groups[5], groups[6]))  # parentheses around the third operation
-    return equation_with_parentheses
+import json
 
 
 def generate_combinations():
@@ -41,38 +9,45 @@ def generate_combinations():
     return [list(combination) for combination in combinations]
 
 
-def find_equations(nums):
-    valid_equations = []
-    for equation in generate_equations(nums):
-        equations_with_parentheses = add_parentheses(equation)
-        for equation in equations_with_parentheses:
-            if "/ 0" in equation:
-                continue
+def generate_expressions(numbers, operators):
+    number_permutations = list(itertools.permutations(numbers))
+    operator_combinations = list(itertools.product(operators, repeat=3))
+
+    valid_expressions = []
+
+    for num_perm in number_permutations:
+        for op_comb in operator_combinations:
+            expression = f"( ( {num_perm[0]} {op_comb[0]} {num_perm[1]} ) {op_comb[1]} {num_perm[2]} ) {op_comb[2]} {num_perm[3]}"
             try:
-                if eval(equation) == 10:
-                    valid_equations.append(equation)
+                if eval(expression) == 10:
+                    valid_expressions.append(expression)
             except ZeroDivisionError:
-                pass  # skip division by zero
-    return valid_equations
+                continue
+
+    return valid_expressions
 
 
-combinations = generate_combinations()
-print("Total combinations:", len(combinations))
+#combinations = generate_combinations()
+#operators = ['+', '-', '/', '*', '**']
 
 i = 1
 
-with open('output.csv', 'w', newline='') as f:
+# with open('valid_expressions.csv', 'w', newline='') as file:
+#    writer = csv.writer(file)
+#    writer.writerow(["Numbers", "Count of valid expressions"])
+#
+#    for numbers in combinations:
+#        print(i)
+#        i = i+1
+#        count = len(generate_expressions(numbers, operators))
+#        writer.writerow([numbers, count])
 
-    writer = csv.writer(f)
-    # Write the headers
-    writer.writerow(["Combination", "Number of Equations"])
-    for y in combinations[162:]:
-        print(f'\rProcessing {i}/715', end='')
-        sys.stdout.flush()  # Make sure the output is immediately printed
-        x = find_equations(y)
-        # Write each row as [Combination, Number of Equations]
-        writer.writerow([str(y), str(len(x))])
+# Open the CSV
+with open('valid_expressions.csv', 'r') as f:
+    # Parse the CSV into a dictionary
+    reader = csv.DictReader(f)
+    rows = list(reader)
 
-        i = i+1
-        del x  # Explicitly delete x
-        gc.collect()  # Call the garbage collector
+# Write the data to a JSON file
+with open('valid_expressions.json', 'w') as f:
+    json.dump(rows, f)
