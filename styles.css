@@ -21,6 +21,15 @@ body {
 .header-block {
   width: 100%;
   text-align: center;
+  padding: 1px;
+  box-sizing: border-box;
+  background-color: #3F4636;
+  color: white;
+}
+
+.difficulty-block {
+  width: 100%;
+  text-align: center;
   padding: 10px;
   box-sizing: border-box;
   background-color: #3F4636;
@@ -50,7 +59,7 @@ p {
 }
 
 .number {
-  background-color: #28a745;
+  background-color: #a08027;
   color: white;
   border: none;
   border-radius: 50%;
@@ -66,7 +75,7 @@ p {
 }
 
 .number:hover {
-  background-color: #218838;
+  background-color: #6e5819;
   cursor: pointer;
 }
 
@@ -76,7 +85,7 @@ p {
 }
 
 .operator {
-  background-color: #007BFF;
+  background-color: #a08027;
   color: white;
   border: none;
   border-radius: 5px;
@@ -87,7 +96,7 @@ p {
 }
 
 .operator:hover {
-  background-color: #0056b3;
+  background-color: #6e5819;
   cursor: pointer;
 }
 
@@ -97,15 +106,21 @@ p {
 }
 
 #user-input {
-  width: 80%;
+  width: 30%;  /* increased width */
   padding: 10px;
-  font-size: 1.2em;
-  margin: 20px 0;
+  font-size: 1.5em;  /* increased font size */
+  margin: 20px auto;  /* center the input field */
   text-align: center;
+  background-color: #A97440;
+  color: white;
+  border: none;  /* remove default border */
+  border-radius: 10px;  /* round the corners */
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);  /* add a subtle shadow */
+  transition: transform 0.3s ease-in-out;  /* smooth transition effect */
 }
 
 #reset-btn {
-  background-color: #ffc107;
+  background-color: #836200;
   color: white;
   border: none;
   border-radius: 5px;
@@ -121,9 +136,9 @@ p {
 }
 
 #try-btn {
-  background-color: #f8f9fa;
-  color: #6c757d;
-  border: 1px solid #6c757d;
+  background-color: #f8f9fa00;
+  color: #c4c4c4;
+  border: 1px solid #6c757d00;
   border-radius: 5px;
   padding: 10px 20px;
   margin: 5px;
@@ -132,12 +147,13 @@ p {
 }
 
 #try-btn:hover {
-  background-color: #e2e6ea;
   cursor: pointer;
 }
 
 #result {
-  color: #dc3545;
+  color: #72be0e;
   font-size: 1.5em;
   margin: 20px 0;
+  display: none;
 }
+

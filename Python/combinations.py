@@ -28,7 +28,11 @@ def generate_expressions(numbers, operators):
 
 
 #combinations = generate_combinations()
-#operators = ['+', '-', '/', '*', '**']
+operators = ['+', '-', '/', '*', '**']
+
+numbers = [3, 1, 0, 2]
+
+print(generate_expressions(numbers, operators))
 
 i = 1
 
@@ -43,11 +47,11 @@ i = 1
 #        writer.writerow([numbers, count])
 
 # Open the CSV
-with open('valid_expressions.csv', 'r') as f:
-    # Parse the CSV into a dictionary
-    reader = csv.DictReader(f)
-    rows = list(reader)
+# with open('valid_expressions.csv', 'r') as f:
+#    # Parse the CSV into a dictionary
+#    reader = csv.DictReader(f)
+#    rows = list(reader)
 
 # Write the data to a JSON file
-with open('valid_expressions.json', 'w') as f:
-    json.dump(rows, f)
+# with open('valid_expressions.json', 'w') as f:
+#    json.dump(rows, f)

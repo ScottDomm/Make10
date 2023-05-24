@@ -9,6 +9,7 @@ const result = document.getElementById('result');
 
 //Global Variables we will use:
 const userInput = document.getElementById('user-input'); //This is what is being displayed (i.e. has x and ^ in it)
+const difficultyBlock = document.getElementById('difficulty-block'); 
 let userInputCalc = ""; // This is the actual formula to evaluate.
 let tableData = null; //This is the list of arrays and ease
 let lookupTable = {};
@@ -114,17 +115,17 @@ function winScreen() {
   numberContainer.style.display = "None";
   operatorContainer.style.display = "None";
   result.textContent = 'Correct! Good job!';
-  result.style.color = 'green';
-  resetBtn.textContent ="These Numbers Again"
-  resetBtn.style.backgroundColor = "#ff0000"
+  resetBtn.textContent ="Same Numbers"
   tryAgainBtn.textContent ="New Numbers"
-  tryAgainBtn.style.backgroundColor = "#00ff00"
+  tryAgainBtn.style.backgroundColor = "#72be0e"
+  tryAgainBtn.style.color = "#ffffff"
 }
 
 function failScreen(failString) {
   result.textContent = failString;
-  result.style.color = 'red';
-  
+  operatorContainer.style.display = "none"
+  result.style.display = "block"
+  userInput.style.display = "none"
 }
 
 
@@ -165,10 +166,11 @@ const generateAndDisplayNumbers = () => {
   let key = JSON.stringify(numbers.sort((a, b) => a - b));
   // Look up the difficulty.
   difficulty = lookupTable[key];
-  console.log(difficulty)
   if (difficulty === "Impossible") {
     generateAndDisplayNumbers();
-  } 
+  }
+  console.log(difficultyBlock)
+  difficultyBlock.textContent = difficulty
 };
 
 //This resets the page by refreshing it and sending us to a new one.
