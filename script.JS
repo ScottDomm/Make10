@@ -68,14 +68,6 @@ const interimChecks = () => {
   let equation = userInputCalc.trim().split(' ');
   let zeroCheckNumbers = equation.filter(item => !isNaN(item)); 
 
-  // REDUNDANT CHECK - Check if zero is not at the front of a number, or if it is, that it is by itself
-  if (zeroCheckNumbers.some(num => num.toString().startsWith('0') && num != "0")) {
-    result.textContent = 'Nice Try! Zero cannot be at the front of a number.';
-    result.style.color = 'red';
-    resetIncorrectBoard()
-    return;
-  }
-
   // Check if there aren't two operators in a row
   for (let i = 0; i < buttonsClicked.length - 1; i++) {
     // Ignore brackets
@@ -107,7 +99,7 @@ const checkResult = () => {
           result.style.color = 'red';
       }
   } catch (e) {
-      failScreen(result.textContent = 'Invalid equation. Try again!');
+      failScreen('Invalid equation. Try again!');
   }
 };
 
@@ -127,8 +119,6 @@ function failScreen(failString) {
   result.style.display = "block"
   userInput.style.display = "none"
 }
-
-
 
 // This evalutes the current formula in the user input.
 function evaluteEquation() {
@@ -151,6 +141,8 @@ operatorContainer.addEventListener('click', event => {
 
 // This is the OG formula that checks if there are 4 numbers after the URL, if not it generates them and sents us there.
 const generateAndDisplayNumbers = () => {
+  setTimeout(function() {
+}, 2000);
   let numbers;
   const search = window.location.search; // Get part of URL after question mark
   if (search && search.match(/^\?[0-9]-[0-9]-[0-9]-[0-9]$/)) { // Check if URL format is correct
@@ -161,7 +153,6 @@ const generateAndDisplayNumbers = () => {
       numbers = generateNumbers(); // Generate random numbers
       window.location.href = `${window.location.origin}/?${numbers.join('-')}`;
   }
-
   
   let key = JSON.stringify(numbers.sort((a, b) => a - b));
   // Look up the difficulty.
@@ -169,7 +160,6 @@ const generateAndDisplayNumbers = () => {
   if (difficulty === "Impossible") {
     generateAndDisplayNumbers();
   }
-  console.log(difficultyBlock)
   difficultyBlock.textContent = difficulty
 };
 
