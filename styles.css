@@ -119,6 +119,10 @@ p {
   transition: transform 0.3s ease-in-out;  /* smooth transition effect */
 }
 
+#user-input:disabled {
+  color: white;
+}
+
 #reset-btn {
   background-color: #836200;
   color: white;
