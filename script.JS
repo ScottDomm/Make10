@@ -22,6 +22,20 @@ const generateNumbers = () => {
     return Array.from({length: 4}, () => Math.floor(Math.random() * 10));
 };
 
+function hideBox(box) {
+  // Reduce the width and height of the box
+  box.style.width = '0';
+  box.style.height = '0';
+  box.style.padding = '0'; // Also reduce padding if any
+  box.style.margin = '0'; // Also reduce margin if any
+  box.style.fontSize = '0'; // Reduce the font size
+
+  // After a delay, set the display to "none"
+  setTimeout(function() {
+    box.style.display = 'none';
+  }, 300); // The delay should match the duration of the transition
+}
+
 //This defines what happens when you click a number button.
 const numberClick = (number, btn) => {
   return () => {
@@ -29,7 +43,8 @@ const numberClick = (number, btn) => {
       userInputCalc += number;
       buttonsClicked.push(number)
       numbersClicked.push(number)
-      btn.style.display = "none";
+  
+      hideBox(btn);
       buttonSwitch("number")
       btn.disabled = true;
       if (numbersClicked.length > 1 && numbersClicked.length < 4) {
@@ -74,7 +89,6 @@ const checkResult = () => {
         winScreen()
       } else {
           failScreen('That\'s not 10! That was ' + eval(finalNumber));
-          result.style.color = 'red';
       }
   } catch (e) {
       failScreen('Invalid equation. Try again!');
@@ -89,13 +103,15 @@ function winScreen() {
   tryAgainBtn.textContent ="New Numbers"
   tryAgainBtn.style.backgroundColor = "#72be0e"
   tryAgainBtn.style.color = "#ffffff"
+  userInput.classList.add("win");
 }
 
 function failScreen(failString) {
+  result.style.color =  "#d85858";
   result.textContent = failString;
   operatorContainer.style.display = "none"
   result.style.display = "block"
-  userInput.style.display = "none"
+  userInput.style.display = "none" 
 }
 
 // This evalutes the current formula in the user input.
