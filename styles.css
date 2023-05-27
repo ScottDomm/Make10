@@ -120,6 +120,12 @@ p {
   transition: transform 0.3s ease-in-out;  /* smooth transition effect */
 }
 
+#user-input:read-only {
+  pointer-events: none;
+  outline: none;
+  user-select: none;
+}
+
 #user-input:disabled {
   color: white;
   -webkit-text-fill-color: white;
