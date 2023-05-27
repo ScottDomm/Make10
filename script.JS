@@ -63,30 +63,8 @@ const initiateNumbers = numbers => {
     }
 };
 
-//These are the checks to be run before evaluating.
-const interimChecks = () => {
-  let equation = userInputCalc.trim().split(' ');
-  let zeroCheckNumbers = equation.filter(item => !isNaN(item)); 
-
-  // Check if there aren't two operators in a row
-  for (let i = 0; i < buttonsClicked.length - 1; i++) {
-    // Ignore brackets
-    if (buttonsClicked[i] === '(' || buttonsClicked[i] === ')' || buttonsClicked[i + 1] === '(' || buttonsClicked[i + 1] === ')') {
-        continue;
-    }
-
-    if (typeof buttonsClicked[i] === 'string' && typeof buttonsClicked[i + 1] === 'string') {
-      result.textContent = 'Invalid equation. You cannot use two operators in a row.';
-      result.style.color = 'red';
-      resetIncorrectBoard()
-      return;
-    }
-  }
-}
-
 //This is the final check that the equiation equals 10
 const checkResult = () => {
-  interimChecks();
       
   let finalNumber = evaluteEquation()
 
