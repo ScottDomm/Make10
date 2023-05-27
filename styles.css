@@ -121,6 +121,8 @@ p {
 
 #user-input:disabled {
   color: white;
+  background-color: #A97440;
+  border: none;  /* remove default border */
 }
 
 #reset-btn {
