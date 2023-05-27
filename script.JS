@@ -48,7 +48,7 @@ const numberClick = (number, btn) => {
       buttonSwitch("number")
       btn.disabled = true;
       if (numbersClicked.length > 1 && numbersClicked.length < 4) {
-        evaluteEquation()
+        evaluateEquation()
       } else if (numbersClicked.length === 4) {
         checkResult()
       }
@@ -81,7 +81,7 @@ const initiateNumbers = numbers => {
 //This is the final check that the equiation equals 10
 const checkResult = () => {
       
-  let finalNumber = evaluteEquation()
+  let finalNumber = evaluateEquation()
 
   // Check if equation equals 10
   try {
@@ -100,8 +100,10 @@ function winScreen() {
   operatorContainer.style.display = "None";
   result.textContent = 'Correct! Good job!';
   resetBtn.textContent ="Same Numbers"
+  resetBtn.style.backgroundColor ="#FF8E25"
   tryAgainBtn.textContent ="New Numbers"
-  tryAgainBtn.style.backgroundColor = "#72be0e"
+  tryAgainBtn.style.backgroundColor = "#22a6a8"
+  userInput.style.border = "None";
   tryAgainBtn.style.color = "#ffffff"
   userInput.classList.add("win");
 }
@@ -115,11 +117,15 @@ function failScreen(failString) {
 }
 
 // This evalutes the current formula in the user input.
-function evaluteEquation() {
+function evaluateEquation() {
   let equation = userInputCalc.trim().split(' ');
-  let currentValue = eval(equation.join(' '))
+  let currentValue = eval(equation.join(' '));
+
+  // Display the equation for a moment
+  userInput.value = equation.join(' ');
   userInput.value = currentValue;
   userInputCalc = currentValue;
+
   return currentValue;
 }
 
