@@ -9,7 +9,6 @@ body {
   height: 100%;
 }
 
-
 .wrapper-block {
   display: flex;
   flex-direction: column;
@@ -30,7 +29,7 @@ body {
 
 .difficulty-block {
   margin-top: 0px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   padding: 0;
   width: 100%;
   text-align: center;
@@ -48,6 +47,42 @@ body {
   background-color: #FF8E25;
   color: #fcc189;
   font-size: 0.6em;
+}
+
+.completed-block {
+  display: none;
+  font-size: 0.6em;
+  margin-top: 0px;
+  margin-bottom: 5px;
+  padding: 0;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  color: #72be0e;  /* change the text color */
+  text-shadow: 0px 0px 3px #72be0e;  /* add a glowing effect */
+}
+
+.progress-block {
+  display: block;
+  font-size: 0.6em;
+  margin-top: 10px;
+  padding: 0;
+  width: 100%;
+  text-align: center;
+  color: #ffffff;  /* change the text color */
+  text-shadow: 0px 0px 3px #ffffff;  /* add a glowing effect */
+}
+
+#progress-block.checkin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  color: #ffffff;  /* change the text color */
+  font-size: clamp(1em, 4vw, 1.3em);
+  animation: pulse 3.0s infinite;  /* add a pulsing animation */
+  width: 40%;
+  white-space: nowrap;
 }
 
 #header-image {

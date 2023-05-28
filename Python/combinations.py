@@ -27,7 +27,7 @@ def generate_expressions(numbers, operators):
     return valid_expressions
 
 
-#combinations = generate_combinations()
+combinations = generate_combinations()
 operators = ['+', '-', '/', '*', '**']
 
 numbers = [3, 1, 0, 2]
@@ -36,15 +36,15 @@ print(generate_expressions(numbers, operators))
 
 i = 1
 
-# with open('valid_expressions.csv', 'w', newline='') as file:
-#    writer = csv.writer(file)
-#    writer.writerow(["Numbers", "Count of valid expressions"])
-#
-#    for numbers in combinations:
-#        print(i)
-#        i = i+1
-#        count = len(generate_expressions(numbers, operators))
-#        writer.writerow([numbers, count])
+with open('valid_expressions.csv', 'w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(["Numbers", "Count of valid expressions"])
+
+    for numbers in combinations:
+        print(i)
+        i = i+1
+        count = len(generate_expressions(numbers, operators))
+        writer.writerow([numbers, count])
 
 # Open the CSV
 # with open('valid_expressions.csv', 'r') as f:
