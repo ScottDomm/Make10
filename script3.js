@@ -5,7 +5,6 @@ const numberContainer = document.getElementById('number-container');
 const operatorContainer = document.getElementById('operator-container');
 const tryAgainBtn = document.getElementById('try-btn');
 const resetBtn = document.getElementById('reset-btn');  
-const result = document.getElementById('result');
 
 //Global Variables we will use:
 const userInput = document.getElementById('user-input'); //This is what is being displayed (i.e. has x and ^ in it)
@@ -88,32 +87,57 @@ const checkResult = () => {
       if (finalNumber === 10) {
         winScreen()
       } else {
-          failScreen('That\'s not 10! That was ' + eval(finalNumber));
+          failScreen('That\'s not 10! That was ' + formatNumber(eval(finalNumber)));
       }
   } catch (e) {
       failScreen('Invalid equation. Try again!');
   }
 };
 
+function formatNumber(num) {
+  // For numbers in scientific notation
+  if (Math.abs(num) >= 1e+21) {
+      let scientificString = num.toPrecision(3); // limit to 3 significant figures
+      let [coeff, exponent] = scientificString.split('e');
+      let [whole, decimal] = coeff.split('.');
+
+      // If the decimal part is undefined or has less than 2 digits, pad it with zeros
+      if (!decimal) {
+          decimal = '00';
+      } else if (decimal.length < 2) {
+          decimal += '0';
+      }
+
+      return `${whole}.${decimal.slice(0, 2)}e${exponent}`;
+  }
+  // For integer numbers
+  else if (Number.isInteger(num)) {
+      return num.toString();
+  }
+  // For decimal numbers
+  else {
+      return num.toFixed(2);
+  }
+}
+
 function winScreen() {
+  resetBtn.style.backgroundColor ="#FF8E25"
+  tryAgainBtn.style.backgroundColor = "#22a6a8"
   numberContainer.style.display = "None";
   operatorContainer.style.display = "None";
-  result.textContent = 'Correct! Good job!';
   resetBtn.textContent ="Same Numbers"
-  resetBtn.style.backgroundColor ="#FF8E25"
   tryAgainBtn.textContent ="New Numbers"
-  tryAgainBtn.style.backgroundColor = "#22a6a8"
   userInput.style.border = "None";
   tryAgainBtn.style.color = "#ffffff"
   userInput.classList.add("win");
 }
 
 function failScreen(failString) {
-  result.style.color =  "#d85858";
-  result.textContent = failString;
-  operatorContainer.style.display = "none"
-  result.style.display = "block"
-  userInput.style.display = "none" 
+  numberContainer.style.display = "None";
+  operatorContainer.style.display = "None";
+  userInput.value = failString;
+  userInput.style.border = "None";
+  userInput.classList.add("lose");
 }
 
 // This evalutes the current formula in the user input.
@@ -148,7 +172,6 @@ const generateAndDisplayNumbers = () => {
   if (search && search.match(/^\?[0-9]-[0-9]-[0-9]-[0-9]$/)) { // Check if URL format is correct
       numbers = search.slice(1).split('-').map(Number); // Get numbers from URL
       initiateNumbers(numbers);
-      result.textContent = '';
   } else {
       numbers = generateNumbers(); // Generate random numbers
       window.location.href = `${window.location.origin}/?${numbers.join('-')}`;

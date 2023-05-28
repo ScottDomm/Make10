@@ -193,6 +193,15 @@ p {
   width: 10%;  /* increased width */
 }
 
+#user-input.lose {
+  font-size: clamp(1em, 4vw, 1.5em);
+  background-color: #d85858;  /* change the background color */
+  color: #ffffff;  /* change the text color */
+  box-shadow: 0px 0px 5px #d85858;  /* add a glowing effect */
+  width: 70%;  /* increased width */
+  white-space: normal;
+}
+
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -220,7 +229,6 @@ p {
   padding: 10px 20px;
   margin: 5px;
   font-size: 1.2em;
-  transition: background-color 0.3s ease;
 }
 
 #reset-btn:hover {
@@ -242,11 +250,3 @@ p {
 #try-btn:hover {
   cursor: pointer;
 }
-
-#result {
-  color: #72be0e;
-  font-size: 1.5em;
-  margin: 20px 0;
-  display: none;
-}
-
