@@ -9,6 +9,10 @@ const difficultyBlock = document.getElementById('difficulty-block');
 const difficultyStaticBlock = document.getElementById('difficulty-static-block');  
 const completeBlock = document.getElementById('completed-block'); 
 const progressBlock = document.getElementById('progress-block'); 
+document.getElementById('close-button').addEventListener('click', function() {
+  document.getElementById('popup').style.display='none';
+});
+
 
 //Global Variables we will use:
 const userInput = document.getElementById('user-input'); //This is what is being displayed (i.e. has x and ^ in it)
@@ -221,6 +225,23 @@ function formatNumber(num) {
 }
 
 function winScreen() {
+// Wherever you check for a correct answer in your code...
+  let popup = document.getElementById('popup');
+  let popupContent = document.querySelector('.popup-content');
+
+  popup.style.display='block';
+  popupContent.style.animation = 'fadeInFromBottom 0.2s';
+
+  // Make the popup fade out after 2 seconds
+  setTimeout(function() {
+      popupContent.style.animation = 'fadeOutToBottom 0.2s forwards';
+  }, 1000);
+
+  // Hide the popup completely after the fade-out animation
+  setTimeout(function() {
+      popup.style.display='none';
+  }, 1200);
+
   resetBtn.style.backgroundColor ="#FF8E25"
   tryAgainBtn.style.backgroundColor = "#22a6a8"
   numberContainer.style.display = "None";
