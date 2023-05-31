@@ -94,9 +94,11 @@ const numberClick = (number, btn) => {
 function buttonSwitch (switchString) {
   if (switchString === "number") {
     Array.from(numberContainer.children).forEach(btn => btn.disabled = true);
+    Array.from(numberContainer.children).forEach(btn => btn.classList.remove("pulse"));
     Array.from(operatorContainer.children).forEach(btn => btn.disabled = false);
   } else {
     Array.from(numberContainer.children).forEach(btn => btn.disabled = false);
+    Array.from(numberContainer.children).forEach(btn => btn.classList.add("pulse"));
     Array.from(operatorContainer.children).forEach(btn => btn.disabled = true);
   }
 }
@@ -228,13 +230,6 @@ function winScreen() {
 // Wherever you check for a correct answer in your code...
   let popup = document.getElementById('popup');
   let popupContent = document.querySelector('.popup-content');
-  let victoryImage = document.getElementById('victory-image');
-
-  var numberOfImages = 6;
-  var randomNumber = Math.floor(Math.random() * numberOfImages) + 1;
-  var imageUrl = 'GopherCelebrations/Win' + randomNumber + '.png';
-
-  victoryImage.src = imageUrl;
 
   popup.style.display='block';
   popupContent.style.animation = 'fadeInFromBottom 0.2s';
