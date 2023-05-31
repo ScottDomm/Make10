@@ -93,6 +93,20 @@ body {
   line-height: 0;
 }
 
+.dedication-block {
+  margin-top: 10px;
+  margin-bottom: 0px;
+  padding: 5px;
+  width: 50%;
+  text-align: center;
+  box-sizing: border-box;
+  background-color: #ce3030;
+  box-shadow: 0px 10px 15px #b32929;
+  border-radius: 0%;
+  color: #ffffff;
+  text-shadow: 0px 0px 10px #ffffff; 
+}
+
 .difficulty-block {
   margin-top: 0px;
   margin-bottom: 5px;
